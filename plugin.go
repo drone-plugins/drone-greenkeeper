@@ -18,10 +18,9 @@ import (
 type (
 	// Config for the plugin.
 	Config struct {
-		Folder      string
-		Update      bool
-		Upload      bool
-		GithubToken string
+		Folder string
+		Update bool
+		Upload bool
 	}
 
 	// Npm config for accessing the registry
@@ -34,10 +33,16 @@ type (
 		SkipVerify bool
 	}
 
+	// Greenkeeper config.
+	Greenkeeper struct {
+		Token string
+	}
+
 	// Plugin values
 	Plugin struct {
-		Config Config
-		Npm    Npm
+		Config      Config
+		Npm         Npm
+		Greenkeeper Greenkeeper
 	}
 )
 
@@ -87,11 +92,15 @@ func (p Plugin) Exec() error {
 		log.Info("Anonymous NPM credentials are being used")
 	}
 
+	var cmd *exec.Cmd
+
 	if p.Config.Update {
-		return runCommand(updateCommand(), p.Config.Folder)
+		cmd = updateCommand()
 	} else {
-		return runCommand(uploadCommand(), p.Config.Folder)
+		cmd = uploadCommand()
 	}
+
+	return runCommand(cmd, p.Config.Folder)
 }
 
 func showVersions(config Config) error {

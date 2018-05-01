@@ -71,9 +71,9 @@ func main() {
 			EnvVar: "PLUGIN_UPLOAD",
 		},
 		cli.BoolFlag{
-			Name:   "github_token",
-			Usage:  "Github token",
-			EnvVar: "PLUGIN_GITHUB_TOKEN,GREENKEEPER_GITHUB_TOKEN",
+			Name:   "gk_token",
+			Usage:  "Greenkeeper token",
+			EnvVar: "PLUGIN_GK_TOKEN,GK_TOKEN",
 		},
 	}
 
@@ -85,10 +85,9 @@ func main() {
 func run(c *cli.Context) error {
 	plugin := Plugin{
 		Config: Config{
-			Folder:      c.String("folder"),
-			Update:      c.Bool("update"),
-			Upload:      c.Bool("upload"),
-			GithubToken: c.String("github_token"),
+			Folder: c.String("folder"),
+			Update: c.Bool("update"),
+			Upload: c.Bool("upload"),
 		},
 		Npm: Npm{
 			Username:   c.String("username"),
@@ -97,6 +96,9 @@ func run(c *cli.Context) error {
 			Email:      c.String("email"),
 			Registry:   c.String("registry"),
 			SkipVerify: c.Bool("skip_verify"),
+		},
+		Greenkeeper: Greenkeeper{
+			Token: c.String("gk_token"),
 		},
 	}
 
