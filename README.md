@@ -32,12 +32,11 @@ Update a lockfile:
 
 ```sh
 docker run --rm \
-  -e DRONE=true \
-  -e DRONE_REMOTE_URL=https://github.com/octocat/hello-world.git \
   -e DRONE_REPO=octocat/hello-world \
+  -e DRONE_REMOTE_URL=https://github.com/octocat/hello-world.git \
+  -e DRONE_BUILD_EVENT=push \
   -e DRONE_COMMIT_BRANCH=greenkeeper/foo-1.0.0 \
   -e DRONE_COMMIT_MESSAGE=chore(package) update foo to version 1.0.0 \
-  -e DRONE_BUILD_EVENT=push \
   -e DRONE_JOB_NUMBER=1 \
   -e PLUGIN_UPDATE=true \
   -v $(pwd):$(pwd) \
@@ -49,15 +48,14 @@ Upload a lockfile:
 
 ```sh
 docker run --rm \
-  -e DRONE=true \
-  -e DRONE_REMOTE_URL=https://github.com/octocat/hello-world.git \
   -e DRONE_REPO=octocat/hello-world \
+  -e DRONE_REMOTE_URL=https://github.com/octocat/hello-world.git \
+  -e DRONE_BUILD_EVENT=push \
   -e DRONE_COMMIT_BRANCH=greenkeeper/foo-1.0.0 \
   -e DRONE_COMMIT_MESSAGE=chore(package) update foo to version 1.0.0 \
-  -e DRONE_BUILD_EVENT=push \
   -e DRONE_JOB_NUMBER=1 \
   -e PLUGIN_UPDATE=true \
-  -e GREENKEEPER_GITHUB_TOKEN=@@@@@@@ \
+  -e GK_TOKEN=@@@@@@@ \
   -v $(pwd):$(pwd) \
   -w $(pwd) \
   plugins/greenkeeper
