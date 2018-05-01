@@ -60,6 +60,7 @@ type (
 		Greenkeeper Greenkeeper
 	}
 
+	// GKCommand is a function that creates a Greenkeeper command
 	GKCommand func(Greenkeeper, Build) *exec.Cmd
 )
 
