@@ -38,6 +38,17 @@ func main() {
 
 		// NPM options
 		cli.StringFlag{
+			Name:   "npm_registry",
+			Usage:  "NPM registry",
+			Value:  GlobalRegistry,
+			EnvVar: "PLUGIN_REGISTRY,NPM_REGISTRY",
+		},
+		cli.StringFlag{
+			Name:   "npm_email",
+			Usage:  "NPM email",
+			EnvVar: "PLUGIN_EMAIL,NPM_EMAIL",
+		},
+		cli.StringFlag{
 			Name:   "npm_username",
 			Usage:  "NPM username",
 			EnvVar: "PLUGIN_USERNAME,NPM_USERNAME",
@@ -48,20 +59,9 @@ func main() {
 			EnvVar: "PLUGIN_PASSWORD,NPM_PASSWORD",
 		},
 		cli.StringFlag{
-			Name:   "npm_email",
-			Usage:  "NPM email",
-			EnvVar: "PLUGIN_EMAIL,NPM_EMAIL",
-		},
-		cli.StringFlag{
 			Name:   "npm_token",
 			Usage:  "NPM deploy token",
 			EnvVar: "PLUGIN_TOKEN,NPM_TOKEN",
-		},
-		cli.StringFlag{
-			Name:   "npm_registry",
-			Usage:  "NPM registry",
-			Value:  GlobalRegistry,
-			EnvVar: "PLUGIN_REGISTRY,NPM_REGISTRY",
 		},
 		cli.BoolFlag{
 			Name:   "npm_skip_verify",
@@ -110,11 +110,11 @@ func run(c *cli.Context) error {
 			Folder: c.String("folder"),
 		},
 		Npm: Npm{
+			Registry:   c.String("registry"),
 			Username:   c.String("username"),
+			Email:      c.String("email"),
 			Password:   c.String("password"),
 			Token:      c.String("token"),
-			Email:      c.String("email"),
-			Registry:   c.String("registry"),
 			SkipVerify: c.Bool("skip_verify"),
 		},
 		Greenkeeper: Greenkeeper{
