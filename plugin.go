@@ -82,15 +82,11 @@ func (p Plugin) Exec() error {
 		log.Info("Anonymous NPM credentials are being used")
 	}
 
-	var cmds []*exec.Cmd
-
 	if p.Config.Update {
-		cmds = append(cmds, updateCommand())
+		return runCommand(updateCommand(), p.Config.Folder)
 	} else {
-		cmds = append(cmds, uploadCommand())
+		return runCommand(uploadCommand(), p.Config.Folder)
 	}
-
-	return runCommands(cmds, p.Config.Folder)
 }
 
 func showVersions(config Config) error {
