@@ -273,6 +273,7 @@ func uploadCommand(gk Greenkeeper, build Build) *exec.Cmd {
 func droneEnvironment(build Build) []string {
 	return []string{
 		"DRONE=true",
+		fmt.Sprintf("PATH=%s", os.Getenv("PATH")),
 		fmt.Sprintf("DRONE_REPO=%s", build.Repo),
 		fmt.Sprintf("DRONE_REMOTE_URL=%s", build.Remote),
 		fmt.Sprintf("DRONE_BUILD_EVENT=%s", build.Event),
