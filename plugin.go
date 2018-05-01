@@ -18,9 +18,9 @@ import (
 type (
 	// Config for the plugin.
 	Config struct {
-		Folder string
 		Update bool
 		Upload bool
+		Folder string
 	}
 
 	// Npm config for accessing the registry
@@ -35,7 +35,11 @@ type (
 
 	// Greenkeeper config.
 	Greenkeeper struct {
-		Token string
+		Token    string
+		Name     string
+		Email    string
+		Ammend   bool
+		YarnOpts string
 	}
 
 	// Plugin values

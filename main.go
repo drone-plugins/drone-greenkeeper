@@ -20,6 +20,16 @@ func main() {
 	app.Action = run
 	app.Version = fmt.Sprintf("%s+%s", version, build)
 	app.Flags = []cli.Flag{
+		cli.BoolFlag{
+			Name:   "upload",
+			Usage:  "upload lockfile",
+			EnvVar: "PLUGIN_UPLOAD",
+		},
+		cli.BoolFlag{
+			Name:   "update",
+			Usage:  "update lockfile",
+			EnvVar: "PLUGIN_UPDATE",
+		},
 		cli.StringFlag{
 			Name:   "folder",
 			Usage:  "folder containing package.json",
@@ -60,20 +70,30 @@ func main() {
 		},
 
 		// Greenkeeper options
-		cli.BoolFlag{
-			Name:   "update",
-			Usage:  "update lockfile",
-			EnvVar: "PLUGIN_UPDATE",
-		},
-		cli.BoolFlag{
-			Name:   "upload",
-			Usage:  "upload lockfile",
-			EnvVar: "PLUGIN_UPLOAD",
-		},
-		cli.BoolFlag{
+		cli.StringFlag{
 			Name:   "gk_token",
 			Usage:  "Greenkeeper token",
 			EnvVar: "PLUGIN_GK_TOKEN,GK_TOKEN",
+		},
+		cli.StringFlag{
+			Name:   "gk_name",
+			Usage:  "Greenkeeper lock commit name",
+			EnvVar: "PLUGIN_GK_NAME",
+		},
+		cli.StringFlag{
+			Name:   "gk_email",
+			Usage:  "Greenkeeper lock commit email",
+			EnvVar: "PLUGIN_GK_EMAIL",
+		},
+		cli.BoolFlag{
+			Name:   "gk_ammend",
+			Usage:  "Greenkeeper lockfile commit should ammend",
+			EnvVar: "PLUGIN_GK_AMMEND",
+		},
+		cli.StringFlag{
+			Name:   "gk_yarn_opts",
+			Usage:  "Greenkeeper yarn lock options",
+			EnvVar: "PLUGIN_GK_YARN_OPTS",
 		},
 	}
 
@@ -85,9 +105,9 @@ func main() {
 func run(c *cli.Context) error {
 	plugin := Plugin{
 		Config: Config{
-			Folder: c.String("folder"),
 			Update: c.Bool("update"),
 			Upload: c.Bool("upload"),
+			Folder: c.String("folder"),
 		},
 		Npm: Npm{
 			Username:   c.String("username"),
@@ -98,7 +118,11 @@ func run(c *cli.Context) error {
 			SkipVerify: c.Bool("skip_verify"),
 		},
 		Greenkeeper: Greenkeeper{
-			Token: c.String("gk_token"),
+			Token:    c.String("gk_token"),
+			Name:     c.String("gk_name"),
+			Email:    c.String("gk_email"),
+			Ammend:   c.Bool("gk_ammend"),
+			YarnOpts: c.String("gk_yarn_opts"),
 		},
 	}
 
