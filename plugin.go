@@ -18,21 +18,26 @@ import (
 type (
 	// Config for the plugin.
 	Config struct {
-		Username    string
-		Password    string
-		Token       string
-		Email       string
-		Registry    string
 		Folder      string
-		SkipVerify  bool
 		Update      bool
 		Upload      bool
 		GithubToken string
 	}
 
+	// Npm config for accessing the registry
+	Npm struct {
+		Registry   string
+		Username   string
+		Email      string
+		Password   string
+		Token      string
+		SkipVerify bool
+	}
+
 	// Plugin values
 	Plugin struct {
 		Config Config
+		Npm    Npm
 	}
 )
 
@@ -55,18 +60,18 @@ func (p Plugin) Exec() error {
 	}
 
 	// Setup the NPM registry
-	err = setupRegistry(p.Config)
+	err = setupRegistry(p.Npm, p.Config)
 
 	if err != nil {
 		return err
 	}
 
 	// See if authentication is required
-	if p.Config.Username == "" || p.Config.Token == "" {
+	if p.Npm.Username == "" || p.Npm.Token == "" {
 		log.Info("NPM credentials are being used")
 
 		// write npmrc for authentication
-		err := writeNpmrc(p.Config)
+		err := writeNpmrc(p.Npm)
 
 		if err != nil {
 			return err
@@ -99,16 +104,16 @@ func showVersions(config Config) error {
 	return runCommands(cmds, config.Folder)
 }
 
-func setupRegistry(config Config) error {
+func setupRegistry(npm Npm, config Config) error {
 	var cmds []*exec.Cmd
 
 	// write registry command
-	if config.Registry != GlobalRegistry {
-		cmds = append(cmds, registryCommand(config.Registry))
+	if npm.Registry != GlobalRegistry {
+		cmds = append(cmds, registryCommand(npm.Registry))
 	}
 
 	// write skip verify command
-	if config.SkipVerify {
+	if npm.SkipVerify {
 		cmds = append(cmds, skipVerifyCommand())
 	}
 
@@ -117,7 +122,7 @@ func setupRegistry(config Config) error {
 }
 
 /// writeNpmrc creates a .npmrc in the folder for authentication
-func writeNpmrc(config Config) error {
+func writeNpmrc(config Npm) error {
 	var npmrcContents string
 
 	// check for an auth token
@@ -176,19 +181,19 @@ func authenticate(config Config) error {
 
 // npmrcContentsUsernamePassword creates the contents from a username and
 // password
-func npmrcContentsUsernamePassword(config Config) string {
+func npmrcContentsUsernamePassword(npm Npm) string {
 	// get the base64 encoded string
-	authString := fmt.Sprintf("%s:%s", config.Username, config.Password)
+	authString := fmt.Sprintf("%s:%s", npm.Username, npm.Password)
 	encoded := base64.StdEncoding.EncodeToString([]byte(authString))
 
 	// create the file contents
-	return fmt.Sprintf("_auth = %s\nemail = %s", encoded, config.Email)
+	return fmt.Sprintf("_auth = %s\nemail = %s", encoded, npm.Email)
 }
 
 /// Writes npmrc contents when using a token
-func npmrcContentsToken(config Config) string {
-	registry, _ := url.Parse(config.Registry)
-	return fmt.Sprintf("//%s/:_authToken=%s", registry.Host, config.Token)
+func npmrcContentsToken(npm Npm) string {
+	registry, _ := url.Parse(npm.Registry)
+	return fmt.Sprintf("//%s/:_authToken=%s", registry.Host, npm.Token)
 }
 
 // versionCommand gets the npm version
