@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
 
@@ -15,8 +15,8 @@ var (
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "npm plugin"
-	app.Usage = "npm plugin"
+	app.Name = "drone-greenkeeper plugin"
+	app.Usage = "drone-greenkeeper plugin"
 	app.Action = run
 	app.Version = fmt.Sprintf("%s+%s", version, build)
 	app.Flags = []cli.Flag{
@@ -129,8 +129,12 @@ func main() {
 		},
 	}
 
+	log.WithFields(log.Fields{
+		"version": app.Version,
+	}).Info("drone-greenkeeper plugin")
+
 	if err := app.Run(os.Args); err != nil {
-		logrus.Fatal(err)
+		log.Fatal(err)
 	}
 }
 
