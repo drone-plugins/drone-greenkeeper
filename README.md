@@ -1,6 +1,8 @@
 # drone-greenkeeper
 
 [![Build Status](http://beta.drone.io/api/badges/drone-plugins/drone-greenkeeper/status.svg)](http://beta.drone.io/drone-plugins/drone-greenkeeper)
+[![Join the discussion at https://discourse.drone.io](https://img.shields.io/badge/discourse-forum-orange.svg)](https://discourse.drone.io)
+[![Drone questions at https://stackoverflow.com](https://img.shields.io/badge/drone-stackoverflow-orange.svg)](https://stackoverflow.com/questions/tagged/drone.io)
 [![Go Doc](https://godoc.org/github.com/drone-plugins/drone-greenkeeper?status.svg)](http://godoc.org/github.com/drone-plugins/drone-greenkeeper)
 [![Go Report](https://goreportcard.com/badge/github.com/drone-plugins/drone-greenkeeper)](https://goreportcard.com/report/github.com/drone-plugins/drone-greenkeeper)
 [![](https://images.microbadger.com/badges/image/plugins/greenkeeper.svg)](https://microbadger.com/images/plugins/greenkeeper "Get your own image badge on microbadger.com")
