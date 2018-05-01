@@ -62,7 +62,7 @@ func (p Plugin) Exec() error {
 	}
 
 	// See if authentication is required
-	if len(p.Config.Username) > 0 || len(p.Config.Token) > 0 {
+	if p.Config.Username == "" || p.Config.Token == "" {
 		log.Info("NPM credentials are being used")
 
 		// write npmrc for authentication
@@ -125,19 +125,19 @@ func writeNpmrc(config Config) error {
 	var npmrcContents string
 
 	// check for an auth token
-	if len(config.Token) == 0 {
+	if config.Token == "" {
 		// check for a username
-		if len(config.Username) == 0 {
+		if config.Username == "" {
 			return errors.New("No username provided")
 		}
 
 		// check for an email
-		if len(config.Email) == 0 {
+		if config.Email == "" {
 			return errors.New("No email address provided")
 		}
 
 		// check for a password
-		if len(config.Password) == 0 {
+		if config.Password == "" {
 			log.Warning("No password provided")
 		}
 
