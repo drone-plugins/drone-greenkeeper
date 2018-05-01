@@ -36,6 +36,38 @@ func main() {
 			EnvVar: "PLUGIN_FOLDER",
 		},
 
+		// Build options
+		cli.StringFlag{
+			Name:   "repo",
+			Usage:  "Repo slug",
+			EnvVar: "DRONE_REPO",
+		},
+		cli.StringFlag{
+			Name:   "remote",
+			Usage:  "Remote url",
+			EnvVar: "DRONE_REMOTE_URL",
+		},
+		cli.StringFlag{
+			Name:   "event",
+			Usage:  "Build event",
+			EnvVar: "DRONE_BUILD_EVENT",
+		},
+		cli.StringFlag{
+			Name:   "branch",
+			Usage:  "Build branch",
+			EnvVar: "DRONE_COMMIT_BRANCH",
+		},
+		cli.StringFlag{
+			Name:   "message",
+			Usage:  "Commit message",
+			EnvVar: "DRONE_COMMIT_MESSAGE",
+		},
+		cli.StringFlag{
+			Name:   "job",
+			Usage:  "Job number",
+			EnvVar: "DRONE_JOB_NUMBER",
+		},
+
 		// NPM options
 		cli.StringFlag{
 			Name:   "npm_registry",
@@ -108,6 +140,14 @@ func run(c *cli.Context) error {
 			Update: c.Bool("update"),
 			Upload: c.Bool("upload"),
 			Folder: c.String("folder"),
+		},
+		Build: Build{
+			Repo:    c.String("repo"),
+			Remote:  c.String("remote"),
+			Event:   c.String("event"),
+			Branch:  c.String("branch"),
+			Message: c.String("message"),
+			Job:     c.String("job"),
 		},
 		Npm: Npm{
 			Registry:   c.String("registry"),

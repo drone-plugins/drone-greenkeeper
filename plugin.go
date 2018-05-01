@@ -23,7 +23,17 @@ type (
 		Folder string
 	}
 
-	// Npm config for accessing the registry
+	// Build information.
+	Build struct {
+		Repo    string
+		Remote  string
+		Event   string
+		Branch  string
+		Message string
+		Job     string
+	}
+
+	// Npm config for accessing the registry.
 	Npm struct {
 		Registry   string
 		Username   string
@@ -45,6 +55,7 @@ type (
 	// Plugin values
 	Plugin struct {
 		Config      Config
+		Build       Build
 		Npm         Npm
 		Greenkeeper Greenkeeper
 	}
