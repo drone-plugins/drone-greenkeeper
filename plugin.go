@@ -59,6 +59,8 @@ type (
 		Npm         Npm
 		Greenkeeper Greenkeeper
 	}
+
+	GKCommand func(Greenkeeper, Build) *exec.Cmd
 )
 
 // GlobalRegistry defines the default NPM registry.
@@ -107,15 +109,15 @@ func (p Plugin) Exec() error {
 		log.Info("Anonymous NPM credentials are being used")
 	}
 
-	var cmd *exec.Cmd
+	var gkCmd GKCommand
 
 	if p.Config.Update {
-		cmd = updateCommand()
+		gkCmd = updateCommand
 	} else {
-		cmd = uploadCommand()
+		gkCmd = uploadCommand
 	}
 
-	return runCommand(cmd, p.Config.Folder)
+	return runCommand(gkCmd(p.Greenkeeper, p.Build), p.Config.Folder)
 }
 
 func showVersions(config Config) error {
@@ -250,12 +252,56 @@ func whoamiCommand() *exec.Cmd {
 	return exec.Command("npm", "whoami")
 }
 
-func updateCommand() *exec.Cmd {
-	return exec.Command("greenkeeper-lockfile-update")
+// updateCommand runs greenkeeper-lockfile-update.
+func updateCommand(gk Greenkeeper, build Build) *exec.Cmd {
+	cmd := exec.Command("greenkeeper-lockfile-update")
+	cmd.Env = append(droneEnvironment(build), greenkeeperEnvironment(gk)...)
+
+	return cmd
 }
 
-func uploadCommand() *exec.Cmd {
-	return exec.Command("greenkeeper-lockfile-upload")
+// uploadCommand runs greenkeeper-lockfile-upload.
+func uploadCommand(gk Greenkeeper, build Build) *exec.Cmd {
+	cmd := exec.Command("greenkeeper-lockfile-upload")
+	cmd.Env = append(droneEnvironment(build), greenkeeperEnvironment(gk)...)
+
+	return cmd
+}
+
+// droneEnvironment enumerates the Drone environment variables required by Greenkeeper.
+func droneEnvironment(build Build) []string {
+	return []string{
+		"DRONE=true",
+		fmt.Sprintf("DRONE_REPO=%s", build.Repo),
+		fmt.Sprintf("DRONE_REMOTE_URL=%s", build.Remote),
+		fmt.Sprintf("DRONE_BUILD_EVENT=%s", build.Event),
+		fmt.Sprintf("DRONE_COMMIT_BRANCH=%s", build.Branch),
+		fmt.Sprintf("DRONE_COMMIT_MESSAGE=%s", build.Message),
+		fmt.Sprintf("DRONE_JOB_NUMBER=%s", build.Job),
+	}
+}
+
+// greenkeeperEnvironment enumerates the Greenkeeper environment variables.
+func greenkeeperEnvironment(gk Greenkeeper) []string {
+	env := []string{fmt.Sprintf("GH_TOKEN=%s", gk.Token)}
+
+	if gk.Name != "" {
+		env = append(env, fmt.Sprintf("GK_LOCK_COMMIT_NAME=%s", gk.Name))
+	}
+
+	if gk.Email != "" {
+		env = append(env, fmt.Sprintf("GK_LOCK_COMMIT_EMAIL=%s", gk.Email))
+	}
+
+	if gk.Ammend {
+		env = append(env, "GK_LOCK_COMMIT_AMEND=true")
+	}
+
+	if gk.YarnOpts != "" {
+		env = append(env, fmt.Sprintf("GK_LOCK_YARN_OPTS=%s", gk.YarnOpts))
+	}
+
+	return env
 }
 
 // trace writes each command to standard error (preceded by a ‘$ ’) before it
