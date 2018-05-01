@@ -89,7 +89,7 @@ func (p Plugin) Exec() error {
 	}
 
 	// See if authentication is required
-	if p.Npm.Username == "" || p.Npm.Token == "" {
+	if p.Npm.Username != "" || p.Npm.Token != "" {
 		log.Info("NPM credentials are being used")
 
 		// write npmrc for authentication

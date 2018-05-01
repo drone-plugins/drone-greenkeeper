@@ -150,12 +150,12 @@ func run(c *cli.Context) error {
 			Job:     c.String("job"),
 		},
 		Npm: Npm{
-			Registry:   c.String("registry"),
-			Username:   c.String("username"),
-			Email:      c.String("email"),
-			Password:   c.String("password"),
-			Token:      c.String("token"),
-			SkipVerify: c.Bool("skip_verify"),
+			Registry:   c.String("npm_registry"),
+			Username:   c.String("npm_username"),
+			Email:      c.String("npm_email"),
+			Password:   c.String("npm_password"),
+			Token:      c.String("npm_token"),
+			SkipVerify: c.Bool("npm_skip_verify"),
 		},
 		Greenkeeper: Greenkeeper{
 			Token:    c.String("gk_token"),
