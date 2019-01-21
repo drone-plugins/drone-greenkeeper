@@ -7,7 +7,6 @@
 [![](https://images.microbadger.com/badges/image/plugins/greenkeeper.svg)](https://microbadger.com/images/plugins/greenkeeper "Get your own image badge on microbadger.com")
 [![Go Doc](https://godoc.org/github.com/drone-plugins/drone-greenkeeper?status.svg)](http://godoc.org/github.com/drone-plugins/drone-greenkeeper)
 [![Go Report](https://goreportcard.com/badge/github.com/drone-plugins/drone-greenkeeper)](https://goreportcard.com/report/github.com/drone-plugins/drone-greenkeeper)
-[![](https://images.microbadger.com/badges/image/plugins/greenkeeper.svg)](https://microbadger.com/images/plugins/greenkeeper "Get your own image badge on microbadger.com")
 
 Drone plugin to use [greenkeeper-lockfile](https://github.com/greenkeeperio/greenkeeper-lockfile) when using a `package.lock` or `yarn.lock` within a JavaScript project. For the usage information and a listing of available options please take a look at [the docs](http://plugins.drone.io/drone-plugins/drone-greenkeeper/).
 
