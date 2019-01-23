@@ -1,4 +1,4 @@
-FROM plugins/base:arm64
+FROM plugins/base:linux-amd64
 
 LABEL maintainer="Drone.IO Community <drone-dev@googlegroups.com>" \
   org.label-schema.name="Drone Greenkeeper" \
@@ -6,8 +6,7 @@ LABEL maintainer="Drone.IO Community <drone-dev@googlegroups.com>" \
   org.label-schema.schema-version="1.0"
 
 RUN apk add --no-cache git nodejs nodejs-npm yarn
-RUN npm install -g npm@latest \
-  npm install -g donny-dont/greenkeeper-lockfile#feat/drone-ci
+RUN npm install -g donny-dont/greenkeeper-lockfile#feat/drone-ci
 
-ADD release/linux/arm64/drone-greenkeeper /bin/
+ADD release/linux/amd64/drone-greenkeeper /bin/
 ENTRYPOINT ["/bin/drone-greenkeeper"]
