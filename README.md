@@ -12,26 +12,31 @@ Drone plugin to use [greenkeeper-lockfile](https://github.com/greenkeeperio/gree
 
 ## Build
 
-Build the binary with the following commands:
+Build the binary with the following command:
 
-```
-go build
+```console
+export GOOS=linux
+export GOARCH=amd64
+export CGO_ENABLED=0
+export GO111MODULE=on
+
+go build -v -a -tags netgo -o release/linux/amd64/drone-greenkeeper
 ```
 
 ## Docker
 
-Build the Docker image with the following commands:
+Build the Docker image with the following command:
 
-```
-GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -a -tags netgo -o release/linux/amd64/drone-greenkeeper
-docker build --rm -t plugins/greenkeeper .
+```console
+docker build \
+  --label org.label-schema.build-date=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
+  --label org.label-schema.vcs-ref=$(git rev-parse --short HEAD) \
+  --file docker/Dockerfile.linux.amd64 --tag plugins/greenkeeper .
 ```
 
 ## Usage
 
-Update a lockfile:
-
-```sh
+```console
 docker run --rm \
   -e DRONE_REPO=octocat/hello-world \
   -e DRONE_REMOTE_URL=https://github.com/octocat/hello-world.git \
@@ -40,23 +45,6 @@ docker run --rm \
   -e DRONE_COMMIT_MESSAGE=chore(package) update foo to version 1.0.0 \
   -e DRONE_JOB_NUMBER=1 \
   -e PLUGIN_UPDATE=true \
-  -v $(pwd):$(pwd) \
-  -w $(pwd) \
-  plugins/greenkeeper
-```
-
-Upload a lockfile:
-
-```sh
-docker run --rm \
-  -e DRONE_REPO=octocat/hello-world \
-  -e DRONE_REMOTE_URL=https://github.com/octocat/hello-world.git \
-  -e DRONE_BUILD_EVENT=push \
-  -e DRONE_COMMIT_BRANCH=greenkeeper/foo-1.0.0 \
-  -e DRONE_COMMIT_MESSAGE=chore(package) update foo to version 1.0.0 \
-  -e DRONE_JOB_NUMBER=1 \
-  -e PLUGIN_UPDATE=true \
-  -e GK_TOKEN=@@@@@@@ \
   -v $(pwd):$(pwd) \
   -w $(pwd) \
   plugins/greenkeeper
