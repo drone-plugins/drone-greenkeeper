@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	log "github.com/sirupsen/logrus"
@@ -9,8 +8,7 @@ import (
 )
 
 var (
-	version = "0.0.0"
-	build   = "0"
+	version = "unknown"
 )
 
 func main() {
@@ -18,7 +16,7 @@ func main() {
 	app.Name = "drone-greenkeeper plugin"
 	app.Usage = "drone-greenkeeper plugin"
 	app.Action = run
-	app.Version = fmt.Sprintf("%s+%s", version, build)
+	app.Version = version
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
 			Name:   "upload",
